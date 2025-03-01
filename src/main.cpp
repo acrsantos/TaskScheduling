@@ -2,6 +2,7 @@
 #include <ios>
 #include <iostream>
 #include <limits>
+#include <string_view>
 
 int prompt_int(std::string_view prompt_msg);
 
