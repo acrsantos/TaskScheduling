@@ -17,7 +17,7 @@ TaskScheduler::TaskScheduler(int task_num, int dependency_num)
 
 void TaskScheduler::dfs_visit(int num) {
     if (rec_stack[num] == true) {
-        std::cout << "Cycle detected at Task: " << num + 1 << '\n';
+        throw std::runtime_error("Error: Cycle detected in the graph");
         return;
     }
 
@@ -87,7 +87,11 @@ void TaskScheduler::topological_sort() {
     std::cout << "                DFS Traversal                  \n";
     std::cout << "===============================================\n";
     std::cout << "Starting from Task: " << start + 1 << '\n';
-    dfs_visit(start);
+    try {
+        dfs_visit(start);
+    } catch (const std::exception& e) {
+        std::cerr << e.what() << '\n';
+    }
     std::cout << task_names_[start];
     for (const auto& i : top_sort) {
         if (i == start) continue;

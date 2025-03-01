@@ -16,6 +16,6 @@ g++ -o TaskScheduling src/main.cpp src/task_scheduler.cpp
 ### Using CMake && bash
 ```
 cd TaskScheduling
-./build.sh
+cmake --build ./build/Debug
 ./build/Debug/TaskScheduling
 ```
