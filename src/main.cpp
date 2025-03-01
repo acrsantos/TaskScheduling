@@ -8,6 +8,9 @@ int prompt_int(std::string_view prompt_msg);
 int main() {
     int num_of_task, num_of_dependencies;
     while (true) {
+        std::cout << "===============================================\n";
+        std::cout << " Task Scheduling with Random Dependency Graphs \n";
+        std::cout << "===============================================\n";
         num_of_task = prompt_int("Enter number of tasks");
         num_of_dependencies = prompt_int("Enter number of num_of_dependencies");
         int max_edge = (num_of_task * (num_of_task - 1))/2;
@@ -18,8 +21,8 @@ int main() {
 
     TaskScheduler ts {num_of_task, num_of_dependencies};
     ts.generate_dgraph();
-    ts.topological_sort();
     ts.print_graph();
+    ts.topological_sort();
     return 0;
 }
 int prompt_int(std::string_view prompt_msg) {

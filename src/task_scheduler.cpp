@@ -9,25 +9,33 @@ TaskScheduler::TaskScheduler(int task_num, int dependency_num)
     graph_ = std::vector<std::vector<int>>(task_num);
     graph_.resize(task_num);
     visited = std::vector<bool>(task_num, false);
+    rec_stack = std::vector<bool>(task_num, false);
     for (size_t i = 0; i < task_num; i++) {
-        task_names_.push_back("Task " + std::to_string(i));
+        task_names_.push_back("Task " + std::to_string(i + 1));
     }
 }
 
 void TaskScheduler::dfs_visit(int num) {
+    if (rec_stack[num] == true) {
+        std::cout << "Cycle detected at Task: " << num + 1 << '\n';
+        return;
+    }
+
     if (visited[num] == true) return;
     visited[num] = true;
-    std::cout << "Processing: " << num << '\n';
+    rec_stack[num] = true;
+    std::cout << "Processing: " << num + 1 << '\n';
     for (const auto& node : graph_[num]) {
         dfs_visit(node);
     }
     top_sort.push_front(num);
+    rec_stack[num] = false;
     std::cout << "\tFinished Processing: " << num << '\n';
-    std::cout << "Topological sort: ";
+    std::cout << "\tTopological sort: { ";
     for (const auto& i : top_sort) {
-        std::cout << i << ' ';
+        std::cout << i + 1 << ' ';
     }
-    std::cout << "\n\n";
+    std::cout << "}\n";
 }
 
 void TaskScheduler::generate_dgraph() {
@@ -75,10 +83,24 @@ void TaskScheduler::generate_dgraph() {
 }
 
 void TaskScheduler::topological_sort() {
+    std::cout << "===============================================\n";
+    std::cout << "                DFS Traversal                  \n";
+    std::cout << "===============================================\n";
+    std::cout << "Starting from Task: " << start + 1 << '\n';
     dfs_visit(start);
+    std::cout << task_names_[start];
+    for (const auto& i : top_sort) {
+        if (i == start) continue;
+        std::cout << " -> " << task_names_[i];
+    }
+    std::cout << std::endl;
 }
 
 void TaskScheduler::print_graph() {
+    std::cout << std::endl;
+    std::cout << "===============================================\n";
+    std::cout << "Adjacency List Representation of Directed Graph\n";
+    std::cout << "===============================================\n";
     for (size_t i = 0; i < graph_.size(); i++) {
         std::cout << task_names_[i] << " -> ";
         for (const auto& node : graph_[i]) {
@@ -86,4 +108,5 @@ void TaskScheduler::print_graph() {
         }
         std::cout << std::endl;
     }
+    std::cout << std::endl;
 }
