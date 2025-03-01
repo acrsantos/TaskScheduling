@@ -30,33 +30,19 @@ void TaskScheduler::dfs_visit(int num) {
     std::cout << "\n\n";
 }
 
-// void TaskScheduler::generate_dgraph() {
-//     std::vector<std::pair<int, int>> edges;
-//     for (size_t i = 0; i < task_num_; i++) {
-//         for (size_t j = i + 1; j < task_num_; j++) {
-//             edges.push_back({i, j});
-//         }
-//     }
-//     std::random_device rd;
-//     std::mt19937 rdm(rd());
-//     std::shuffle(edges.begin(), edges.end(), rdm);
-//
-//     for (size_t i = 0; i < dependency_num_; i++) {
-//         int src = edges[i].first;
-//         int dest = edges[i].second;
-//         graph_[src].push_back(dest);
-//     }
-// }
-
 void TaskScheduler::generate_dgraph() {
     std::vector<int> num_permutation;
     for (int i = 0; i < task_num_; i++) {
         num_permutation.push_back(i);
     }
+
     std::random_device rd;
     std::mt19937 rdm(rd());
     std::shuffle(num_permutation.begin(), num_permutation.end(), rdm);
+
     start = num_permutation[0];
+
+    int remaining_edges = dependency_num_ - 1;
 
     std::vector<std::pair<int, int>> existing_edges;
     for (int i = 1; i < task_num_; i++) {
@@ -64,9 +50,14 @@ void TaskScheduler::generate_dgraph() {
         int j = rand() % i;
         graph_[num_permutation[j]].push_back(num_permutation[i]);
         existing_edges.push_back({num_permutation[j], num_permutation[i]});
+        if (remaining_edges < 1) {
+            break;
+        }
+        remaining_edges--;
     }
 
-    int remaining_edges = dependency_num_ - (task_num_ - 1);
+    if (remaining_edges < 1)
+        return;
 
     std::vector<std::pair<int, int>> edges;
     for (int i = 0; i < task_num_; i++) {
@@ -75,14 +66,7 @@ void TaskScheduler::generate_dgraph() {
                 edges.push_back({num_permutation[i], num_permutation[j]});
         }
     }
-
     std::shuffle(edges.begin(), edges.end(), rdm);
-    std::cout << '\n';
-    for (const auto& edge : edges) {
-        std::cout << edge.first << ' ' << edge.second << ", ";
-    }
-    std::cout << '\n';
-
     for (int i = 0; i < remaining_edges; i++) {
         int src = edges[i].first;
         int dest = edges[i].second;
@@ -92,10 +76,6 @@ void TaskScheduler::generate_dgraph() {
 
 void TaskScheduler::topological_sort() {
     dfs_visit(start);
-    for (const size_t& num : top_sort) {
-        std::cout << task_names_[num] << " ";
-    }
-    std::cout << std::endl;
 }
 
 void TaskScheduler::print_graph() {
