@@ -15,18 +15,24 @@ int main() {
         std::cout << " Task Scheduling with Random Dependency Graphs \n";
         std::cout << "===============================================\n";
         num_of_task = prompt_int("Enter number of tasks");
-        num_of_dependencies = prompt_int("Enter number of num_of_dependencies");
+        num_of_dependencies = prompt_int("Enter number of dependecies");
         int max_edge = (num_of_task * (num_of_task - 1))/2;
         if (num_of_dependencies < 1) {
-            clear_screen();
             std::cout << "Error: number of dependecies must be greater than 0\n";
+            std::cout << "Press enter to continue...";
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cin.get();
+            clear_screen();
             continue;
         }
 
         if (num_of_dependencies <= max_edge) break;
 
-        clear_screen();
         std::cout << "Error: Number of dependecies exceeds the maximum possible edge of graph with " << num_of_task << " number of tasks\n";
+        std::cout << "Press enter to continue...";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.get();
+        clear_screen();
     }
 
     TaskScheduler ts {num_of_task, num_of_dependencies};
@@ -40,11 +46,19 @@ int prompt_int(std::string_view prompt_msg) {
     while (true) {
         std::cout << prompt_msg << ": ";
         std::cin >> num;
-        if (!std::cin.fail()) 
-            return num;
 
+        if (!std::cin.fail() && num > 0) {
+            return num;
+        } else if (std::cin.fail()) {
+            std::cout << "Error: Invalid input.\n";
+        }else {
+            std::cout << "Error: Input must be greater than 0\n";
+        }
+
+        std::cout << "Press enter to continue...";
         std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max());
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.get();
     }
 }
 

@@ -19,5 +19,6 @@ private:
     std::vector<bool> visited;
     std::list<int> top_sort;
     std::vector<bool> rec_stack;
+    std::vector<bool> isolated;
     int start;
 };

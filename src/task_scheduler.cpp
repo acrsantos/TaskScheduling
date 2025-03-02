@@ -11,6 +11,7 @@ TaskScheduler::TaskScheduler(int task_num, int dependency_num)
     graph = std::vector<std::vector<int>>(task_num);
     visited = std::vector<bool>(task_num, false);
     rec_stack = std::vector<bool>(task_num, false);
+    isolated = std::vector<bool>(task_num, false);
 
     // Generate task names
     for (size_t i = 0; i < task_num; i++) {
@@ -128,18 +129,31 @@ void TaskScheduler::topological_sort() {
     // The exception is caught and the program will print the error message
     try {
         dfs_visit(start);
+        for (int i = 0; i < task_num; i++) {
+            if (!visited[i]) {
+                dfs_visit(i);
+                isolated[i] = true;
+            }
+        }
     } catch (const std::exception& e) {
         std::cerr << e.what() << '\n';
     }
 
     // Print the topological sort
-    std::cout << "\nTask Schedule: ";
+    std::cout << "\nTask Order per Task component:\n";
+    int ctr = 0;
+    bool first = true;
+    top_sort.reverse();
     for (const auto& i : top_sort) {
-        if (i == start) {
-            std::cout << task_names[start];
-            continue;
+        if (!first) {
+            if (isolated[i]) {
+                std::cout << '\n';
+            } else {
+                std::cout << " -> ";
+            }
         }
-        std::cout << " -> " << task_names[i];
+        first = false;
+        std::cout << task_names[i];
     }
     std::cout << std::endl;
 }
@@ -151,10 +165,13 @@ void TaskScheduler::print_adj_list() {
     std::cout << "===============================================\n";
     for (size_t i = 0; i < graph.size(); i++) {
         std::cout << "Task " << (i + 1) << " -> ";
+        if (graph[i].empty()) {
+            std::cout << "No dependencies";
+        }
         for (const auto& node : graph[i]) {
             std::cout << "Task " << (node + 1) << " ";
         }
-        std::cout << std::endl;
+        std::cout << '\n';
     }
     std::cout << std::endl;
 }
