@@ -11,10 +11,10 @@ public:
     void dfs_visit(int num);
     void print_graph();
 private:
-    int task_num_;
-    int dependency_num_;
-    std::vector<std::vector<int>> graph_;
-    std::vector<std::string> task_names_;
+    int task_num;
+    int dependency_num;
+    std::vector<std::vector<int>> graph;
+    std::vector<std::string> task_names;
 
     std::vector<bool> visited;
     std::list<int> top_sort;
