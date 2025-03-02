@@ -98,6 +98,7 @@ void TaskScheduler::generate_dgraph() {
     // This will only generate edges (u, v) where u < v, which in this case, u = i and v = i + 1
     // This means that in the random sequence of number, the current iteration will generate edges
     // between the current number and all the numbers that come after it
+    // This is to ensure that the graph that is generated is a directed acyclic graph
     for (int i = 0; i < task_num; i++) {
         for (int j = i + 1; j < task_num; j++) {
             // If the edge (i, j) already exists from generating the spanning tree, skip it from generating
