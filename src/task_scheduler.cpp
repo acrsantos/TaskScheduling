@@ -133,23 +133,26 @@ void TaskScheduler::topological_sort() {
     }
 
     // Print the topological sort
-    std::cout << task_names[start];
+    std::cout << "\nTask Schedule: ";
     for (const auto& i : top_sort) {
-        if (i == start) continue;
+        if (i == start) {
+            std::cout << task_names[start];
+            continue;
+        }
         std::cout << " -> " << task_names[i];
     }
     std::cout << std::endl;
 }
 
-void TaskScheduler::print_graph() {
+void TaskScheduler::print_adj_list() {
     std::cout << std::endl;
     std::cout << "===============================================\n";
     std::cout << "Adjacency List Representation of Directed Graph\n";
     std::cout << "===============================================\n";
     for (size_t i = 0; i < graph.size(); i++) {
-        std::cout << task_names[i] << " -> ";
+        std::cout << "Task " << (i + 1) << " -> ";
         for (const auto& node : graph[i]) {
-            std::cout << task_names[node] << " ";
+            std::cout << "Task " << (node + 1) << " ";
         }
         std::cout << std::endl;
     }

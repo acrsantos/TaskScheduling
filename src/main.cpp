@@ -31,7 +31,7 @@ int main() {
 
     TaskScheduler ts {num_of_task, num_of_dependencies};
     ts.generate_dgraph();
-    ts.print_graph();
+    ts.print_adj_list();
     ts.topological_sort();
     return 0;
 }

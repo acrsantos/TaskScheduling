@@ -9,7 +9,7 @@ public:
     void topological_sort();
     void generate_dgraph();
     void dfs_visit(int num);
-    void print_graph();
+    void print_adj_list();
 private:
     int task_num;
     int dependency_num;
