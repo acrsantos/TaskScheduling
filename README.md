@@ -24,5 +24,5 @@ cmake --build ./build/release
 #### Alternatively, run the build.sh script to generate compile_commands.json for clangd language server for development
 ```
 cd TaskScheduling
-./build.sh
+./build.sh -g
 ```
